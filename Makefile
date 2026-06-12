@@ -3,12 +3,13 @@ CSTD            := -std=c11
 WARN            := -Wall -Wextra -Wpedantic
 OPT             := -O2
 
+# You asked to include the required libraries explicitly.
+# Keep pkg-config for include paths, and add the libs directly.
 PKG_CFLAGS      := $(shell pkg-config --cflags x11 xi)
-PKG_LIBS        := $(shell pkg-config --libs x11 xi)
 
 CFLAGS          := $(CSTD) $(WARN) $(OPT) $(PKG_CFLAGS)
 LDFLAGS         :=
-LDLIBS          := $(PKG_LIBS)
+LDLIBS          := -lXi -lX11
 
 TARGET          := x11-block-rightclick
 SRC             := x11_block_rightclick_target_window.c
@@ -67,8 +68,10 @@ install-service:
 		'' \
 		'[Service]' \
 		'Type=simple' \
-		'ExecStart=%h/.local/bin/$(TARGET)' \
+		'Environment=DISPLAY=:0' \
+		'Environment=XAUTHORITY=%h/.Xauthority' \
 		'Environment=X11_BLOCK_RIGHTCLICK_CONFIG=%h/.config/x11-block-rightclick.conf' \
+		'ExecStart=%h/.local/bin/$(TARGET)' \
 		'Restart=on-failure' \
 		'RestartSec=2' \
 		'' \
