@@ -72,8 +72,10 @@ install-service:
 		'Environment=XAUTHORITY=%h/.Xauthority' \
 		'Environment=X11_BLOCK_RIGHTCLICK_CONFIG=%h/.config/x11-block-rightclick.conf' \
 		'ExecStart=%h/.local/bin/$(TARGET)' \
+		'ExecStop=/bin/sh -c '\''pkill -INT -f "$(TARGET)"'\'' ' \
 		'Restart=on-failure' \
 		'RestartSec=2' \
+		'TimeoutStopSec=5s' \
 		'' \
 		'[Install]' \
 		'WantedBy=graphical-session.target' \
