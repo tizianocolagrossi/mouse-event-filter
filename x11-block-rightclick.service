@@ -1,0 +1,14 @@
+[Unit]
+Description=Block right-click on selected X11 windows
+After=graphical-session.target
+PartOf=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=%h/.local/bin/x11-block-rightclick
+Environment=X11_BLOCK_RIGHTCLICK_CONFIG=%h/.config/x11-block-rightclick.conf
+Restart=on-failure
+RestartSec=2
+
+[Install]
+WantedBy=graphical-session.target
